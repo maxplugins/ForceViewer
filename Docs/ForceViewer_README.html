@@ -1,0 +1,127 @@
+<HTML>
+<HEAD>
+	<TITLE>ForceViewer</TITLE>
+	<STYLE TYPE="text/css">
+	<--
+		HR { color:rgb(140,140,140); height:1px; }
+		IMG { border-style:solid; border-width:1px; border-color:rgb(0,0,0); }
+		CODE { color:rgb(0,0,220); }
+		P.indent { padding:0pt 0pt 0pt 20pt }
+		DL.indent { padding:0pt 0pt 0pt 20pt }
+		DD { padding:3pt; }
+		LI { padding:3pt; }
+		LI.compact { padding:0pt; }
+		BODY { color:rgb(0,0,0); background-color:rgb(220,220,220); font-family:"Veranda","Arial","sans-serif"; font-size:10pt; }
+		A { text-decoration:none; }
+		A:link { color:rgb(0,0,150); }
+		A:visited { color:rgb(127,0,0) }
+		A:hover { background-color:rgb(255,255,0); }
+	-->
+	</STYLE>
+</HEAD>
+
+<BODY>
+
+<A NAME="top"></A>
+<H1>ForceViewer</H1>
+<UL>
+	<LI CLASS="compact"><A HREF="#options">Options</A></LI>
+	<LI CLASS="compact"><A HREF="#bugs">Known Bugs/Limitations</A></LI>
+	<LI CLASS="compact"><A HREF="#history">History</A></LI>
+	<LI CLASS="compact"><A HREF="#contact">Contact / Disclaimer / License</A></LI>
+</UL>
+
+<HR>
+<DIV ALIGN="center">
+	<P>A helper object that lets you directly visualize the effects of spacewarps in a scene.</P>
+	<P><IMG SRC="./images/Sample_ForceViewer.jpg" ALT="Sample Image"></P>
+	<P>The image on the left shows a vortex and a decayed directional wind with a slight turbulence.</P>
+	<P>The image on the right shows a simple decayed spherical wind.</P>
+</DIV>
+
+<A NAME="options"></A>
+<HR>
+<H3>Options:</H3>
+<DIV ALIGN="center">
+	<IMG SRC="./images/UI_ForceViewer.gif" ALT="User Interface">
+</DIV>
+<BR>
+<BR>
+<UL>
+	<LI><B>Dimensions Group:</B>
+	<DL>
+		<DT><B>X / Y / Z Size:</B>
+			<DD>Sets the size of the ForceViewer cube.  This acts as a "window" into space, showing what effect spacewarps are having inside the cube.
+		<DT><B>X / Y / Z Resolution:</B>
+			<DD>Sets the resolution of the ForceViewer cube, or how how many vectors are along each axis of the cube.<BR>
+			Note, it is often handy to set one of these (usually Z) to 1 to reduce visual clutter (giving you a 2D plane of vectors).  Then you can simply scrub the plane around in space to get a better sense of what spacewarps are doing.
+		<BR>
+	</DL><BR>
+
+	<LI><B>Forces Group:</B>
+	<DL>
+		<DT><B>Add / Remove:</B>
+			<DD>Allows you to set which spacewarps you want to view.
+		<BR>
+	</DL><BR>
+
+	<LI><B>Display Group:</B>
+	<DL>
+		<DT><B>Vector Scale:</B>
+			<DD>Adjusts how large the force vectors are drawn.  1.0 is their "real" size.
+		<DT><B>Display Vector Bases:</B>
+			<DD>If on, each vector gets a dot at its base, to better indicate its direction.<BR>
+			If the vector is pointing out of the view (towards you), the base is solid.  If it's pointing into the view (away from you), it's hollow.<BR>
+			Note that turning this on can slow down the display quite a bit.
+		<DT><B>Display Lattice:</B>
+			<DD>Draws a 3D lattice surrounding the vectors.
+		<BR>
+	</DL><BR>
+</UL>
+<P><A HREF="#top">Back To Top...</A></P>
+
+<A NAME="bugs"></A>
+<HR>
+<H3>Known Bugs/Limitations:</H3>
+<UL>
+	<LI>Blur's Wind and RandomWalk will (unfortunately) not work with ForceViewer due to apparent bugs with those spacewarps.
+</UL>
+<P><A HREF="#top">Back To Top...</A></P>
+
+<A NAME="history"></A>
+<HR>
+<H3>History:</H3>
+<PRE>
+2001.10.17 - Created.
+2001.11.14 - Added backfacing vector bases a la NullHelper.
+2003.07.21 - Changed defaults to a flat, dense plane of vectors (usually more helpful).
+2003.10.15 - Bugfixes in display.
+2007.02.20 - Updating for public 3dsmax9 release.
+2008.04.05 - Updated to 64 bit and 3dsmax 2008.  Thanks to <a href="http://www.maxplugins.de/">David Baker</a> for the help.
+</PRE>
+<P><A HREF="#top">Back To Top...</A></P>
+
+<A NAME="contact"></A>
+<HR>
+<H3>Contact / Disclaimer / License:</H3>
+Bug reports/comments/suggestions: <A HREF="http://www.footools.com/">http://www.footools.com/</A>. If you use this software on a project, sending an e-mail/postcard indicating such would be appreciated.<BR>
+<PRE>
+This software is provided 'as-is', without any express or implied warranty. In no
+event will the author be held liable for any damages arising from the use of this
+software.
+
+Permission is granted to anyone to use this software, subject to the following
+restrictions:
+
+1. The origin of this software must NOT be misrepresented; you must not claim that
+   you wrote the original software.
+
+2. This software may NOT be bundled with any other product or included in any
+   compilation without the express permission of the author.
+
+3. This notice must NOT be removed or altered from any distribution of this
+   software.
+</PRE>
+<P><A HREF="#top">Back To Top...</A></P>
+</BODY>
+</HTML>
