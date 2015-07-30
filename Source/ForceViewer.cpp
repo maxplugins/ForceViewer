@@ -200,6 +200,9 @@ BOOL ForceViewerValidator::IsValidNode(INode* inode)
 static ForceViewerValidator forceViewerValidator;
 
 ///////////////////////////////////////////////////////////////////////////
+#if MAX_VERSION_MAJOR < 15	//Max 2013
+ #define p_end end
+#endif
 
 static ParamBlockDesc2 forceviewer_pblock
 (
@@ -213,55 +216,55 @@ static ParamBlockDesc2 forceviewer_pblock
 		p_default, 		1.0f,
 		p_range, 		DISPLAY_SIZE_MIN, DISPLAY_SIZE_MAX,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_FLOAT, IDC_SIZEX_EDIT, IDC_SIZEX_SPIN, SPIN_AUTOSCALE,
-		end,
+		p_end,
 	fv_sizey, _T("sizeY"), TYPE_FLOAT, P_RESET_DEFAULT, IDS_SIZEY,
 		p_accessor,		&forceViewerAccessor,
 		p_default, 		1.0f,
 		p_range, 		DISPLAY_SIZE_MIN, DISPLAY_SIZE_MAX,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_FLOAT, IDC_SIZEY_EDIT, IDC_SIZEY_SPIN, SPIN_AUTOSCALE,
-		end,
+		p_end,
 	fv_sizez, _T("sizeZ"), TYPE_FLOAT, P_RESET_DEFAULT, IDS_SIZEZ,
 		p_accessor,		&forceViewerAccessor,
 		p_default, 		1.0f,
 		p_range, 		DISPLAY_SIZE_MIN, DISPLAY_SIZE_MAX,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_FLOAT, IDC_SIZEZ_EDIT, IDC_SIZEZ_SPIN, SPIN_AUTOSCALE,
-		end,
+		p_end,
 	fv_resx, _T("resolutionX"), TYPE_INT, 0, IDS_RESX,
 		p_accessor,		&forceViewerAccessor,
 		p_default, 		RES_INIT,
 		p_range, 		RES_MIN, RES_MAX,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_INT, IDC_RESX_EDIT, IDC_RESX_SPIN, 1.0f,
-		end,
+		p_end,
 	fv_resy, _T("resolutionY"), TYPE_INT, 0, IDS_RESY,
 		p_accessor,		&forceViewerAccessor,
 		p_default, 		RES_INIT,
 		p_range, 		RES_MIN, RES_MAX,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_INT, IDC_RESY_EDIT, IDC_RESY_SPIN, 1.0f,
-		end,
+		p_end,
 	fv_resz, _T("resolutionZ"), TYPE_INT, 0, IDS_RESZ,
 		p_accessor,		&forceViewerAccessor,
 		p_default, 		1,
 		p_range, 		RES_MIN, RES_MAX,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_INT, IDC_RESZ_EDIT, IDC_RESZ_SPIN, 1.0f,
-		end,
+		p_end,
 	fv_forcenodes, _T("forceNodes"), TYPE_INODE_TAB, 0, P_VARIABLE_SIZE, IDS_FORCENODES,
 		p_ui,			TYPE_NODELISTBOX, IDC_FORCENODES, IDC_FORCENODE_ADD, 0, IDC_FORCENODE_REMOVE,
 		p_validator,	&forceViewerValidator,
-		end,
+		p_end,
 	fv_vectorscale, _T("vectorScale"), TYPE_FLOAT, 0, IDS_VECTORSCALE,
 		p_default, 		10.0f,
 		p_range, 		-999999.f, 999999.f,
 		p_ui, 			TYPE_SPINNER, EDITTYPE_FLOAT, IDC_VECTORSCALE_EDIT, IDC_VECTORSCALE_SPIN, SPIN_AUTOSCALE,
-		end,
+		p_end,
 	fv_displayvectorbases, _T("displayVectorBases"), TYPE_BOOL, 0, IDS_DISPLAY_VECTORBASES,
 		p_default, 		FALSE,
 		p_ui, 			TYPE_SINGLECHEKBOX, IDC_DISPLAY_VECTORBASES,
-		end,
+		p_end,
 	fv_displaylattice, _T("displayLattice"), TYPE_BOOL, 0, IDS_DISPLAY_LATTICE,
 		p_default, 		FALSE,
 		p_ui, 			TYPE_SINGLECHEKBOX, IDC_DISPLAY_LATTICE,
-		end,
-	end
+		p_end,
+	p_end
 );
 
 ///////////////////////////////////////////////////////////////////////////
@@ -306,11 +309,20 @@ void ForceViewer::EndEditParams(IObjParam* ip, ULONG flags, Animatable* next)
 	this->ip = NULL;
 }
 
+#if MAX_VERSION_MAJOR < 17	//Max 2015
 RefResult ForceViewer::NotifyRefChanged(
 		Interval changeInt,
 		RefTargetHandle hTarget,
    		PartID& partID,
    		RefMessage message )
+#else
+RefResult ForceViewer::NotifyRefChanged(
+		const Interval& changeInt,
+		RefTargetHandle hTarget,
+   		PartID& partID,
+   		RefMessage message,
+		BOOL propagate)
+#endif
 {
 	switch (message)
 	{
@@ -366,6 +378,13 @@ CreateMouseCallBack* ForceViewer::GetCreateMouseCallBack()
 
 int ForceViewer::HitTest(TimeValue t, INode *inode, int type, int crossing, int flags, IPoint2 *p, ViewExp *vpt)
 {
+#if MAX_VERSION_MAJOR >= 15	//Max 2013
+	if ( ! vpt || ! vpt->IsAlive() )
+	{
+		DbgAssert(!_T("Invalid viewport!"));
+		return FALSE;
+	}
+#endif
 	Update(t, inode);
 
 	GraphicsWindow *gw = vpt->getGW();
@@ -395,6 +414,13 @@ int ForceViewer::HitTest(TimeValue t, INode *inode, int type, int crossing, int 
 
 int ForceViewer::Display(TimeValue t, INode* inode, ViewExp *vpt, int flags)
 {
+#if MAX_VERSION_MAJOR >= 15	//Max 2013
+	if ( ! vpt || ! vpt->IsAlive() )
+	{
+		DbgAssert(!_T("Invalid viewport!"));
+		return FALSE;
+	}
+#endif
 	Update(t, inode);
 
 	GraphicsWindow *gw = vpt->getGW();
@@ -455,6 +481,13 @@ Interval ForceViewer::ObjectValidity(TimeValue t)
 
 void ForceViewer::GetWorldBoundBox(TimeValue t, INode* inode, ViewExp* vpt, Box3& box)
 {
+#if MAX_VERSION_MAJOR >= 15	//Max 2013
+	if ( ! vpt || ! vpt->IsAlive() )
+	{
+		box.Init();
+		return;
+	}
+#endif
 	Update(t, inode);
 
 	GetVectorCubeBound(box);
@@ -464,6 +497,13 @@ void ForceViewer::GetWorldBoundBox(TimeValue t, INode* inode, ViewExp* vpt, Box3
 
 void ForceViewer::GetLocalBoundBox(TimeValue t, INode* inode, ViewExp* vpt, Box3& box)
 {
+#if MAX_VERSION_MAJOR >= 15	//Max 2013
+	if ( ! vpt || ! vpt->IsAlive() )
+	{
+		box.Init();
+		return;
+	}
+#endif
 	Update(t, inode);
 
 	GetVectorCubeBound(box);

@@ -77,7 +77,11 @@ class ForceViewer : public HelperObject {
 
 		// Animatable
 		Class_ID ClassID() { return FORCEVIEWER_CLASSID; }
+#if MAX_VERSION_MAJOR < 15	//Max 2013
 		TCHAR *GetObjectName() { return GetString(IDS_FORCEVIEWER_CLASSNAME); }
+#else
+		const TCHAR *GetObjectName() { return GetString(IDS_FORCEVIEWER_CLASSNAME); }
+#endif
 		void GetClassName(TSTR& s) { s = GetObjectName(); }
 		void DeleteThis() { delete this; }
 
@@ -95,8 +99,18 @@ class ForceViewer : public HelperObject {
 		// Reference Maker
 		int NumRefs() { return NUM_REFS; }
 		RefTargetHandle GetReference(int i) { return pblock; }
+#if MAX_VERSION_MAJOR < 14	//Max 2012
 		void SetReference(int i, RefTargetHandle rtarg) { pblock = (IParamBlock2*)rtarg; }
+#else
+private:
+		virtual void SetReference(int i, RefTargetHandle rtarg) { pblock = (IParamBlock2*)rtarg; }
+public:
+#endif
+#if MAX_VERSION_MAJOR < 17	//Max 2015
 		RefResult NotifyRefChanged(Interval changeInt,RefTargetHandle hTarget, PartID& partID, RefMessage message);
+#else
+		RefResult NotifyRefChanged(const Interval& changeInt,RefTargetHandle hTarget, PartID& partID, RefMessage message, BOOL propagate);
+#endif
 
 		// Reference Target
 		RefTargetHandle Clone(RemapDir& remap);
